@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+  <head>
+     
+    <script src="js/angular.min.js"></script> 
+    
+    <meta charset="utf-8" />
+  </head>
+  <body >
+    <div ng-app="journalingApp" ng-controller="journalingController">
+      <form ng-submit="addRow()">
+        Date: <input type="text" name="date" ng-model="theEntryDate"><br/>
+        Transaction: <input type="text" ng-model="theTransaction" /><br/>
+        
+        <input type="submit" value="Add Transaction">
+      </form>
+      <br/>
+      <table class="table" border="1">
+        <tr>
+          <th>Date
+          </th>
+          <th>Transaction
+          </th>
+        </tr>
+        <tr ng-repeat="transaction in Transactions">
+          <td>{{transaction.date}}
+          </td>
+          <td>{{transaction.name}}
+          </td>
+          <td>
+            <input type="submit" ng-click="removeRow(transaction.id)" />
+          </td>
+        </tr>
+      </table>
+    </div>
+    <script>
+      var app = angular.module('journalingApp', []);
+      app.controller('journalingController', function($scope) {
+          $scope.Transactions = [];
+          $scope.transactionId = 1;
+          
+          $scope.addRow = function(){		
+            $scope.Transactions.push({ 'date':$scope.theEntryDate, 'name': $scope.theTransaction, 'id': $scope.transactionId});
+            $scope.transactionId++;
+            $scope.theEntryDate='';
+            $scope.theTransaction='';
+          };
+          
+          $scope.removeRow = function(toRemove){	
+            for(var i = 0; i < $scope.Transactions.length; i++){
+              if(toRemove === $scope.Transactions[i].id){
+                $scope.Transactions.splice(i,1);
+              }
+            }
+          };
+      });
+      
+    </script>
+    
+  </body>
+</html>
