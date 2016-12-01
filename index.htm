@@ -37,20 +37,23 @@
       var app = angular.module('journalingApp', []);
       app.controller('journalingController', function($scope,$http) {
           $scope.Transactions = [];
-          $scope.transactionId = 1;
+          
+          $scope.getRow = function(){
+            $http.get("getEvent.php")
+            .then(function (response) {$scope.Transactions = response.data.records;});
+          };
           
           $scope.addRow = function(){		
-            $scope.Transactions.push({ 'date':$scope.theEntryDate, 'name': $scope.theTransaction, 'id': $scope.transactionId});
+            //$scope.Transactions.push({ 'date':$scope.theEntryDate, 'name': $scope.theTransaction, 'id': $scope.transactionId});
             
             $http.post("insertEvent.php", {
               'jdate':$scope.theEntryDate,
-              'jname':$scope.theTransaction,
-              'jid':$scope.transactionId
+              'jname':$scope.theTransaction
             }).success(function(data,status,headers,config){
               console.log("Data Inserted Successfully");
+              $scope.getRow();
             });
             
-            $scope.transactionId++;
             $scope.theEntryDate='';
             $scope.theTransaction='';
           };
@@ -68,6 +71,8 @@
               console.log("Removed Successfully");
             });
           };
+          
+          $scope.getRow();
       });
       
     </script>
