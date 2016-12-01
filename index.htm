@@ -28,19 +28,28 @@
           <td>{{transaction.name}}
           </td>
           <td>
-            <input type="submit" ng-click="removeRow(transaction.id)" />
+            <button ng-click="removeRow(transaction.id)">remove</button>
           </td>
         </tr>
       </table>
     </div>
     <script>
       var app = angular.module('journalingApp', []);
-      app.controller('journalingController', function($scope) {
+      app.controller('journalingController', function($scope,$http) {
           $scope.Transactions = [];
           $scope.transactionId = 1;
           
           $scope.addRow = function(){		
             $scope.Transactions.push({ 'date':$scope.theEntryDate, 'name': $scope.theTransaction, 'id': $scope.transactionId});
+            
+            $http.post("insert.php", {
+              'jdate':$scope.theEntryDate,
+              'jname':$scope.theTransaction,
+              'jid':$scope.transactionId
+            }).success(function(data,status,headers,config){
+              console.log("Data Inserted Successfully");
+            });
+            
             $scope.transactionId++;
             $scope.theEntryDate='';
             $scope.theTransaction='';
