@@ -42,7 +42,7 @@
           $scope.addRow = function(){		
             $scope.Transactions.push({ 'date':$scope.theEntryDate, 'name': $scope.theTransaction, 'id': $scope.transactionId});
             
-            $http.post("insert.php", {
+            $http.post("insertEvent.php", {
               'jdate':$scope.theEntryDate,
               'jname':$scope.theTransaction,
               'jid':$scope.transactionId
@@ -61,6 +61,12 @@
                 $scope.Transactions.splice(i,1);
               }
             }
+            
+            $http.post("removeEvent.php", {
+              'jToRemove':toRemove
+            }).success(function(data,status,headers,config){
+              console.log("Removed Successfully");
+            });
           };
       });
       
