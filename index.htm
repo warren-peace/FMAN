@@ -148,6 +148,20 @@
             $scope.eType.napili = null;
           };
           
+          $scope.removeEntry = function(toRemove){	
+            for(var i = 0; i < $scope.Entries.length; i++){
+              if(toRemove === $scope.Entries[i].id){
+                $scope.Entries.splice(i,1);
+              }
+            }
+            
+            $http.post("removeEntry.php", {
+              'eToRemove':toRemove
+            }).success(function(data,status,headers,config){
+              console.log("Removed Successfully");
+            });
+          };
+          
           $scope.getEntries();
           // Entries end --------------
       });
