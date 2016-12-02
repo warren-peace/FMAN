@@ -42,6 +42,36 @@
         </select><br/>
         <input type="submit" value="Add Entry">
       </form>
+      <br/>
+      <table class="table" border="1">
+        <tr>
+          <th>Date
+          </th>
+          <th>Account
+          </th>
+          <th>Debit
+          </th>
+          <th>Credit
+          </th>
+        </tr>
+        <tr ng-repeat="entry in Entries">
+          <td>{{entry.date}}
+          </td>
+          <td>{{entry.account}}
+          </td>
+          <td ng-if="entry.type == 'credit'">
+          </td>
+          <td ng-if="entry.type == 'credit'">{{entry.amount}}
+          </td>
+          <td ng-if="entry.type == 'debit'">{{entry.amount}}
+          </td>
+          <td ng-if="entry.type == 'debit'">
+          </td>
+          <td>
+            <button ng-click="removeEntry(entry.id)">remove</button>
+          </td>
+        </tr>
+      </table>
     </div>
     <script>
       var app = angular.module('journalingApp', []);
@@ -86,6 +116,13 @@
           // Transactions end --------------
           
           // Entries start --------------
+          $scope.Entries = [];
+          
+          $scope.getEntries = function(){
+            $http.get("getEntries.php")
+            .then(function (response) {$scope.Entries = response.data.records;});
+          };
+          
           $scope.eType = {
             'napili': null,
             'pagpipilian':[
@@ -102,7 +139,7 @@
               'etype':$scope.eType.napili
             }).success(function(data,status,headers,config){
               console.log("Entry Inserted Successfully");
-              //$scope.getRow();
+              $scope.getEntries();
             });
             
             $scope.eDate = '';
@@ -110,6 +147,8 @@
             $scope.eAmount = '';
             $scope.eType.napili = null;
           };
+          
+          $scope.getEntries();
           // Entries end --------------
       });
       
