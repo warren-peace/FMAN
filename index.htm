@@ -9,7 +9,7 @@
   <body >
     <div ng-app="journalingApp" ng-controller="journalingController">
       <form ng-submit="addRow()">
-        Date: <input type="text" name="date" ng-model="theEntryDate"><br/>
+        Date: <input type="text" ng-model="theEntryDate"><br/>
         Transaction: <input type="text" ng-model="theTransaction" /><br/>
         
         <input type="submit" value="Add Transaction">
@@ -32,10 +32,21 @@
           </td>
         </tr>
       </table>
+      
+      <form ng-submit="addEntry()">
+        Date: <input type="text" ng-model="eDate"><br/>
+        Account: <input type="text" ng-model="eAccount"><br/>
+        Amount: <input type="text" ng-model="eAmount">
+        <select ng-model="eType.napili">
+          <option ng-repeat="listahan in eType.pagpipilian" value="{{listahan.val}}">{{listahan.show}}</option>
+        </select><br/>
+        <input type="submit" value="Add Entry">
+      </form>
     </div>
     <script>
       var app = angular.module('journalingApp', []);
       app.controller('journalingController', function($scope,$http) {
+          // Transactions start --------------
           $scope.Transactions = [];
           
           $scope.getRow = function(){
@@ -44,7 +55,6 @@
           };
           
           $scope.addRow = function(){		
-            //$scope.Transactions.push({ 'date':$scope.theEntryDate, 'name': $scope.theTransaction, 'id': $scope.transactionId});
             
             $http.post("insertEvent.php", {
               'jdate':$scope.theEntryDate,
@@ -73,6 +83,34 @@
           };
           
           $scope.getRow();
+          // Transactions end --------------
+          
+          // Entries start --------------
+          $scope.eType = {
+            'napili': null,
+            'pagpipilian':[
+              {'val':'credit', 'show':'To Credit'},
+              {'val':'debit', 'show':'To Debit'}
+            ]
+          };
+          
+          $scope.addEntry = function(){
+            $http.post("insertEntry.php", {
+              'edate':$scope.eDate,
+              'eaccount':$scope.eAccount,
+              'eamount':$scope.eAmount,
+              'etype':$scope.eType.napili
+            }).success(function(data,status,headers,config){
+              console.log("Entry Inserted Successfully");
+              //$scope.getRow();
+            });
+            
+            $scope.eDate = '';
+            $scope.eAccount = '';
+            $scope.eAmount = '';
+            $scope.eType.napili = null;
+          };
+          // Entries end --------------
       });
       
     </script>

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 01, 2016 at 11:54 AM
+-- Generation Time: Dec 02, 2016 at 04:12 AM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -19,6 +19,21 @@ SET time_zone = "+00:00";
 --
 -- Database: `fin-man`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `journal-entries`
+--
+
+CREATE TABLE IF NOT EXISTS `journal-entries` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` varchar(8) NOT NULL,
+  `account` varchar(50) NOT NULL,
+  `type` varchar(6) NOT NULL,
+  `amount` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
