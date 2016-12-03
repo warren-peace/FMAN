@@ -72,6 +72,15 @@
           </td>
         </tr>
       </table>
+      
+      <button ng-click="generateAccounts()">generate ledger accounts</button>
+      <br />
+      <table class="table" border="1" ng-repeat="lAccount in generatedAccounts">
+        <tr><td colspan="2">{{lAccount}}</td></tr>
+        <tr ng-init="jDebits=getDebits(lAccount);" ng-if=" 1==1">
+          <td>hi</td>
+        </tr>
+      </table>
     </div>
     <script>
       var app = angular.module('journalingApp', []);
@@ -164,6 +173,20 @@
           
           $scope.getEntries();
           // Entries end --------------
+          
+          // journal accounts start --------------
+          $scope.generatedAccounts = [];
+          $scope.generateAccounts = function(){
+            $http.get("generateAccounts.php")
+            .then(function (response) {$scope.generatedAccounts = response.data.records;});
+            
+          };
+          
+          $scope.getDebits = function(){
+            console.log("got debit");
+            
+          };
+          // journal accounts end --------------
       });
       
     </script>
