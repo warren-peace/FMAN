@@ -79,6 +79,7 @@
         <tr><td colspan="2">{{lAccount}}</td></tr>
         <tr ng-if="lAccount != ''">
           <td ng-init="getDebits(lAccount);" ng-bind-html="jDebits[lAccount] | trust"></td>
+          <td ng-init="getCredits(lAccount);" ng-bind-html="jCredits[lAccount] | trust"></td>
         </tr>
       </table>
     </div>
@@ -181,6 +182,7 @@
             .then(function (response) {
               $scope.generatedAccounts = response.data.records;
               $scope.jDebits = [];
+              $scope.jCredits = [];
             });
             
           };
@@ -190,6 +192,15 @@
               'aToFind':accountToFind
             }).success(function(data,status,headers,config){
               $scope.jDebits[accountToFind] = data.records;
+              
+            });
+          };
+          
+          $scope.getCredits = function(accountToFind){
+            $http.post("getCredits.php", {
+              'aToFind':accountToFind
+            }).success(function(data,status,headers,config){
+              $scope.jCredits[accountToFind] = data.records;
               
             });
           };
