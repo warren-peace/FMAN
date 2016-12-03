@@ -77,8 +77,8 @@
       <br />
       <table class="table" border="1" ng-repeat="lAccount in generatedAccounts">
         <tr><td colspan="2">{{lAccount}}</td></tr>
-        <tr ng-init="jDebits=getDebits(lAccount);" ng-if=" 1==1">
-          <td>hi</td>
+        <tr ng-if="lAccount != ''">
+          <td ng-init="getDebits(lAccount);" ng-bind-html="jDebits[lAccount] | trust"></td>
         </tr>
       </table>
     </div>
@@ -178,16 +178,28 @@
           $scope.generatedAccounts = [];
           $scope.generateAccounts = function(){
             $http.get("generateAccounts.php")
-            .then(function (response) {$scope.generatedAccounts = response.data.records;});
+            .then(function (response) {
+              $scope.generatedAccounts = response.data.records;
+              $scope.jDebits = [];
+            });
             
           };
           
-          $scope.getDebits = function(){
-            console.log("got debit");
-            
+          $scope.getDebits = function(accountToFind){
+            $http.post("getDebits.php", {
+              'aToFind':accountToFind
+            }).success(function(data,status,headers,config){
+              $scope.jDebits[accountToFind] = data.records;
+              
+            });
           };
           // journal accounts end --------------
       });
+      app.filter("trust", ['$sce', function($sce) {
+        return function(htmlCode){
+          return $sce.trustAsHtml(htmlCode);
+        }
+      }]);
       
     </script>
     
