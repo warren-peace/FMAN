@@ -73,7 +73,7 @@
         </tr>
       </table>
       
-      <button ng-click="generateAccounts()">generate ledger accounts</button>
+      <button ng-click="generateAccounts()">regenerate ledger accounts</button>
       <br />
       <table class="table" border="1" ng-repeat="lAccount in generatedAccounts">
         <tr><td colspan="2">{{lAccount}}</td></tr>
@@ -150,6 +150,7 @@
             }).success(function(data,status,headers,config){
               console.log("Entry Inserted Successfully");
               $scope.getEntries();
+              $scope.generateAccounts();
             });
             
             $scope.eDate = '';
@@ -169,6 +170,7 @@
               'eToRemove':toRemove
             }).success(function(data,status,headers,config){
               console.log("Removed Successfully");
+              $scope.generateAccounts();
             });
           };
           
@@ -177,15 +179,16 @@
           
           // journal accounts start --------------
           $scope.generatedAccounts = [];
+          $scope.jDebits = [];
+          $scope.jCredits = [];
           $scope.generateAccounts = function(){
             $http.get("generateAccounts.php")
             .then(function (response) {
               $scope.generatedAccounts = response.data.records;
-              $scope.jDebits = [];
-              $scope.jCredits = [];
             });
             
           };
+          $scope.generateAccounts();
           
           $scope.getDebits = function(accountToFind){
             $http.post("getDebits.php", {
