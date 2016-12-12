@@ -223,7 +223,7 @@
 				<div class="x-content">
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h4><i class="fa fa-fw fa-compass"></i> Ledger Accounts</h4>
+							<h4><i class="fa fa-fw fa-compass"></i> Journal Entries</h4>
 						</div>
 						<div class="panel-body">
 							<table class="table table-striped" border="1">
@@ -255,9 +255,11 @@
 									</td>
 								</tr>
 							  </table>
-							<button ng-click="generateAccounts()" class="btn btn-primary">regenerate ledger accounts</button>
+							
 							<br /><br />
-             
+              <div class="panel-heading">
+                <h4><i class="fa fa-fw fa-compass"></i> Ledger Accounts</h4>
+              </div>
               <table class="table" border="1" ng-repeat="lAccount in generatedAccounts">
 								<tr>
 									<td colspan="2">{{lAccount}}</td></tr>
