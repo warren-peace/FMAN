@@ -7,11 +7,12 @@
   $aToFind = mysql_real_escape_string($data->aToFind);
   $result = $conn->query("SELECT `amount` FROM `journal-entries` WHERE `account`='".$aToFind."' AND `type`='credit'");
 
-  $outp = '"';
+  $outp = '';
   while($rs = $result->fetch_array(MYSQLI_ASSOC)) {
-      $outp .= $rs["amount"] . '<br>';
+      if ($outp != "") {$outp .= ",";}
+      $outp .= $rs["amount"];
   }
-  $outp ='{"records":'.$outp.'"}';
+  $outp ='{"records":['.$outp.']}';
   $conn->close();
 
   echo($outp);

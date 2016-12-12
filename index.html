@@ -257,12 +257,17 @@
 							  </table>
 							<button ng-click="generateAccounts()" class="btn btn-primary">regenerate ledger accounts</button>
 							<br /><br />
-							<table class="table" border="1" ng-repeat="lAccount in generatedAccounts">
+             
+              <table class="table" border="1" ng-repeat="lAccount in generatedAccounts">
 								<tr>
 									<td colspan="2">{{lAccount}}</td></tr>
 								<tr ng-if="lAccount != ''">
-									<td ng-init="getDebits(lAccount);" ng-bind-html="jDebits[lAccount] | trust"></td>
-									<td ng-init="getCredits(lAccount);" ng-bind-html="jCredits[lAccount] | trust"></td>
+									<td ng-init="getDebits(lAccount);">
+                      <div ng-repeat="lDebits in jDebits[lAccount]">{{lDebits}}</div>
+                  </td>
+									<td ng-init="getCredits(lAccount);">
+                      <div ng-repeat="lCredits in jCredits[lAccount]">{{lCredits}}</div>
+                  </td>
 								</tr>
 							</table>
 						</div>
@@ -357,8 +362,15 @@
           
           $scope.getEntries = function(){
             $http.get("getEntries.php")
-            .then(function (response) {$scope.Entries = response.data.records;});
+            .then(function (response) {
+              $scope.Entries = response.data.records; 
+              $scope.eDate = '';
+              $scope.eAccount = '';
+              $scope.eAmount = '';
+              $scope.eType.napili = null;
+            });
           };
+          $scope.getEntries();
           
           $scope.eType = {
             'napili': null,
@@ -376,19 +388,32 @@
               'etype':$scope.eType.napili
             }).success(function(data,status,headers,config){
               console.log("Entry Inserted Successfully");
+              $scope.getDebits($scope.eAccount);
+              $scope.getCredits($scope.eAccount);
               $scope.getEntries();
-              $scope.generateAccounts();
             });
             
-            $scope.eDate = '';
-            $scope.eAccount = '';
-            $scope.eAmount = '';
-            $scope.eType.napili = null;
+            
           };
           
           $scope.removeEntry = function(toRemove){	
             for(var i = 0; i < $scope.Entries.length; i++){
               if(toRemove === $scope.Entries[i].id){
+                if($scope.Entries[i].type == "debit"){
+                  var sjDebits = $scope.jDebits[$scope.Entries[i].account];
+                  for( var j = 0; j < sjDebits.length; j++){
+                    if(sjDebits[j] == $scope.Entries[i].amount){
+                      sjDebits.splice(j,1);
+                    }
+                  } 
+                }else{
+                  var sjCredits = $scope.jCredits[$scope.Entries[i].account];
+                  for( var j = 0; j < sjCredits.length; j++){
+                    if(sjCredits[j] == $scope.Entries[i].amount){
+                      sjCredits.splice(j,1);
+                    }
+                  }
+                }
                 $scope.Entries.splice(i,1);
               }
             }
@@ -397,11 +422,10 @@
               'eToRemove':toRemove
             }).success(function(data,status,headers,config){
               console.log("Removed Successfully");
-              $scope.generateAccounts();
+              
             });
           };
           
-          $scope.getEntries();
           // Entries end --------------
           
           // journal accounts start --------------
@@ -422,7 +446,6 @@
               'aToFind':accountToFind
             }).success(function(data,status,headers,config){
               $scope.jDebits[accountToFind] = data.records;
-              
             });
           };
           
@@ -431,7 +454,6 @@
               'aToFind':accountToFind
             }).success(function(data,status,headers,config){
               $scope.jCredits[accountToFind] = data.records;
-              
             });
           };
           // journal accounts end --------------
