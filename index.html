@@ -391,6 +391,7 @@
               $scope.getDebits($scope.eAccount);
               $scope.getCredits($scope.eAccount);
               $scope.getEntries();
+              $scope.generateAccounts();
             });
             
             
@@ -422,7 +423,7 @@
               'eToRemove':toRemove
             }).success(function(data,status,headers,config){
               console.log("Removed Successfully");
-              
+              $scope.generateAccounts();
             });
           };
           
