@@ -440,19 +440,28 @@
               
               var acc = $scope.eAccount;
               var amt = $scope.eAmount;
+              var tag = false;
               if($scope.eType.napili == "debit"){
                 for(var i = 0; i < $scope.dTotal[1].length; i++){
                   //console.log($scope.dTotal[1][i]);
                   if($scope.dTotal[1][i] == acc){
                     $scope.dTotal[0] += parseInt(amt);
+                    tag = true;
                   }
+                }
+                if(tag == false){
+                  $scope.cTotal[0] -= parseInt(amt);
                 }
               }else{
                 for(var i = 0; i < $scope.cTotal[1].length; i++){
                   //console.log($scope.cTotal[1][i]);
                   if($scope.cTotal[1][i] == acc){
                     $scope.cTotal[0] += parseInt(amt);
+                    tag = true;
                   }
+                }
+                if(tag == false){
+                  $scope.dTotal[0] -= parseInt(amt);
                 }
               }
             });
