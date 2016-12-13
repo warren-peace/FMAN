@@ -206,12 +206,12 @@
 								<br/>
 								<div class="form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12">Select</label>
-                                            <div class="col-md-4 col-sm-4 col-xs-12">
-                                                <select class="form-control" ng-model="eType.napili">
-                                                    <option ng-repeat="listahan in eType.pagpipilian" value="{{listahan.val}}">{{listahan.show}}</option>
-                                                </select>
-                                            </div>
-											<br/>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <select class="form-control" ng-model="eType.napili">
+                        <option ng-repeat="listahan in eType.pagpipilian" value="{{listahan.val}}">{{listahan.show}}</option>
+                    </select>
+                </div>
+                <br/>
 								</div>
 								<br/>
 								<input type="submit" value="Add Entry" class="btn btn-primary">
@@ -271,6 +271,18 @@
                       <div ng-repeat="lCredits in jCredits[lAccount]">{{lCredits}}</div>
                   </td>
 								</tr>
+                <tr ng-if="lAccount != '' && jDebits[lAccount+'Sum'] > jCredits[lAccount+'Sum']" style="background-color:aquamarine;">
+                  <td >
+                    {{jDebits[lAccount+'Sum'] - jCredits[lAccount+'Sum']}}
+                  </td>
+                  <td></td>
+                </tr>
+                <tr ng-if="lAccount != '' && jDebits[lAccount+'Sum'] < jCredits[lAccount+'Sum']" style="background-color:aquamarine;">
+                  <td></td>
+                  <td >
+                    {{jCredits[lAccount+'Sum'] - jDebits[lAccount+'Sum']}}
+                  </td>
+                </tr>
 							</table>
 						</div>
 					</div>
@@ -449,6 +461,12 @@
               'aToFind':accountToFind
             }).success(function(data,status,headers,config){
               $scope.jDebits[accountToFind] = data.records;
+              //test
+              var temp = 0;
+              for(var i = 0; i < data.records.length; i++){
+                 temp += data.records[i];
+              }
+              $scope.jDebits[accountToFind+'Sum'] = temp;
             });
           };
           
@@ -457,6 +475,12 @@
               'aToFind':accountToFind
             }).success(function(data,status,headers,config){
               $scope.jCredits[accountToFind] = data.records;
+              //test
+              var temp = 0;
+              for(var i = 0; i < data.records.length; i++){
+                 temp += data.records[i];
+              }
+              $scope.jCredits[accountToFind+'Sum'] = temp;
             });
           };
           // journal accounts end --------------
