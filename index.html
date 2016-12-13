@@ -263,7 +263,7 @@
               </div>
               <table class="table" border="1" ng-repeat="lAccount in generatedAccounts">
 								<tr>
-									<td colspan="2">{{lAccount}}</td></tr>
+									<th colspan="2">{{lAccount}}</th></tr>
 								<tr ng-if="lAccount != ''">
 									<td ng-init="getDebits(lAccount);">
                       <div ng-repeat="lDebits in jDebits[lAccount] track by $index">{{lDebits}}</div>
@@ -291,10 +291,10 @@
                 <h4><i class="fa fa-fw fa-compass"></i> Unadjusted Trial Balance</h4>
               </div>
               <table class="table" border="1">
-                <tr style="background-color:#ddd;">
-                  <td>Accounts</td>
-                  <td>Debit</td>
-                  <td>Credit</td>
+                <tr>
+                  <th>Accounts</th>
+                  <th>Debit</th>
+                  <th>Credit</th>
                 </tr>
 								<tr ng-repeat="lAccount in generatedAccounts">
 									<td>{{lAccount}}</td>
@@ -437,7 +437,7 @@
               $scope.getCredits($scope.eAccount);
               $scope.getEntries();
               $scope.generateAccounts();
-              
+              // update Unadjusted Trial Balance
               var acc = $scope.eAccount;
               var amt = $scope.eAmount;
               var tag = false;
