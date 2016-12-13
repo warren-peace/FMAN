@@ -257,6 +257,7 @@
 							  </table>
 							
 							<br /><br />
+              <!-- Ledger Accounts -->
               <div class="panel-heading">
                 <h4><i class="fa fa-fw fa-compass"></i> Ledger Accounts</h4>
               </div>
@@ -265,7 +266,7 @@
 									<td colspan="2">{{lAccount}}</td></tr>
 								<tr ng-if="lAccount != ''">
 									<td ng-init="getDebits(lAccount);">
-                      <div ng-repeat="lDebits in jDebits[lAccount]">{{lDebits}}</div>
+                      <div ng-repeat="lDebits in jDebits[lAccount] track by $index">{{lDebits}}</div>
                   </td>
 									<td ng-init="getCredits(lAccount);">
                       <div ng-repeat="lCredits in jCredits[lAccount]">{{lCredits}}</div>
@@ -282,6 +283,36 @@
                   <td >
                     {{jCredits[lAccount+'Sum'] - jDebits[lAccount+'Sum']}}
                   </td>
+                </tr>
+							</table>
+              <br /><br />
+              <!-- Unadjusted Trial Balance -->
+              <div class="panel-heading">
+                <h4><i class="fa fa-fw fa-compass"></i> Unadjusted Trial Balance</h4>
+              </div>
+              <table class="table" border="1">
+                <tr style="background-color:#ddd;">
+                  <td>Accounts</td>
+                  <td>Debit</td>
+                  <td>Credit</td>
+                </tr>
+								<tr ng-repeat="lAccount in generatedAccounts">
+									<td>{{lAccount}}</td>
+                  <td ng-if="lAccount != '' && jDebits[lAccount+'Sum'] > jCredits[lAccount+'Sum']">
+                    <span ng-init="getDebitTotal(jDebits[lAccount+'Sum'] - jCredits[lAccount+'Sum'],lAccount)"></span>
+                    {{jDebits[lAccount+'Sum'] - jCredits[lAccount+'Sum']}}
+                  </td>
+                  <td ng-if="lAccount != '' && jDebits[lAccount+'Sum'] > jCredits[lAccount+'Sum']"></td>
+                  <td ng-if="lAccount != '' && jDebits[lAccount+'Sum'] < jCredits[lAccount+'Sum']"></td>
+                  <td ng-if="lAccount != '' && jDebits[lAccount+'Sum'] < jCredits[lAccount+'Sum']">
+                    <span ng-init="getCreditTotal(jCredits[lAccount+'Sum'] - jDebits[lAccount+'Sum'],lAccount)"></span>
+                    {{jCredits[lAccount+'Sum'] - jDebits[lAccount+'Sum']}}
+                  </td>
+                </tr>
+                <tr style="background-color:aquamarine;">
+                  <td>TOTAL</td>
+                  <td>{{dTotal[0]}}</td>
+                  <td>{{cTotal[0]}}</td>
                 </tr>
 							</table>
 						</div>
@@ -406,6 +437,24 @@
               $scope.getCredits($scope.eAccount);
               $scope.getEntries();
               $scope.generateAccounts();
+              
+              var acc = $scope.eAccount;
+              var amt = $scope.eAmount;
+              if($scope.eType.napili == "debit"){
+                for(var i = 0; i < $scope.dTotal[1].length; i++){
+                  //console.log($scope.dTotal[1][i]);
+                  if($scope.dTotal[1][i] == acc){
+                    $scope.dTotal[0] += parseInt(amt);
+                  }
+                }
+              }else{
+                for(var i = 0; i < $scope.cTotal[1].length; i++){
+                  //console.log($scope.cTotal[1][i]);
+                  if($scope.cTotal[1][i] == acc){
+                    $scope.cTotal[0] += parseInt(amt);
+                  }
+                }
+              }
             });
             
             
@@ -419,6 +468,8 @@
                   for( var j = 0; j < sjDebits.length; j++){
                     if(sjDebits[j] == $scope.Entries[i].amount){
                       sjDebits.splice(j,1);
+                      $scope.jDebits[$scope.Entries[i].account+'Sum'] -= $scope.Entries[i].amount;
+                      //$scope.getDebits($scope.Entries[i].account);
                     }
                   } 
                 }else{
@@ -426,6 +477,8 @@
                   for( var j = 0; j < sjCredits.length; j++){
                     if(sjCredits[j] == $scope.Entries[i].amount){
                       sjCredits.splice(j,1);
+                      $scope.jCredits[$scope.Entries[i].account+'Sum'] -= $scope.Entries[i].amount;
+                      //$scope.getCredits($scope.Entries[i].account);
                     }
                   }
                 }
@@ -467,6 +520,8 @@
                  temp += data.records[i];
               }
               $scope.jDebits[accountToFind+'Sum'] = temp;
+              //console.log($scope.jDebits[accountToFind+'Sum']);
+              //$scope.getDebitTotal();
             });
           };
           
@@ -484,6 +539,17 @@
             });
           };
           // journal accounts end --------------
+          
+          $scope.dTotal = [0,[]];
+          $scope.getDebitTotal = function(toAdd, acc){
+            $scope.dTotal[0] += parseInt(toAdd);
+            $scope.dTotal[1].push(acc);
+          };
+          $scope.cTotal = [0,[]];
+          $scope.getCreditTotal = function(toAdd, acc){
+            $scope.cTotal[0] += parseInt(toAdd);
+            $scope.cTotal[1].push(acc);
+          };
       });
       app.filter("trust", ['$sce', function($sce) {
         return function(htmlCode){
