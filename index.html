@@ -479,6 +479,20 @@
                       sjDebits.splice(j,1);
                       $scope.jDebits[$scope.Entries[i].account+'Sum'] -= $scope.Entries[i].amount;
                       //$scope.getDebits($scope.Entries[i].account);
+                      // update Unadjusted Trial Balance
+                      var acc = $scope.Entries[i].account;
+                      var amt = $scope.Entries[i].amount;
+                      var tag = false;
+                      for(var i = 0; i < $scope.dTotal[1].length; i++){
+                        //console.log($scope.dTotal[1][i]);
+                        if($scope.dTotal[1][i] == acc){
+                          $scope.dTotal[0] -= parseInt(amt);
+                          tag = true;
+                        }
+                      }
+                      if(tag == false){
+                        $scope.cTotal[0] += parseInt(amt);
+                      }
                     }
                   } 
                 }else{
@@ -488,6 +502,20 @@
                       sjCredits.splice(j,1);
                       $scope.jCredits[$scope.Entries[i].account+'Sum'] -= $scope.Entries[i].amount;
                       //$scope.getCredits($scope.Entries[i].account);
+                      // update Unadjusted Trial Balance
+                      var acc = $scope.Entries[i].account;
+                      var amt = $scope.Entries[i].amount;
+                      var tag = false;
+                      for(var i = 0; i < $scope.cTotal[1].length; i++){
+                        //console.log($scope.cTotal[1][i]);
+                        if($scope.cTotal[1][i] == acc){
+                          $scope.cTotal[0] -= parseInt(amt);
+                          tag = true;
+                        }
+                      }
+                      if(tag == false){
+                        $scope.dTotal[0] += parseInt(amt);
+                      }
                     }
                   }
                 }
