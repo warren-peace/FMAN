@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 03, 2016 at 10:57 PM
+-- Generation Time: Dec 14, 2016 at 11:59 AM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `journal-entries` (
   `type` varchar(6) NOT NULL,
   `amount` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=66 ;
 
 --
 -- Dumping data for table `journal-entries`
@@ -47,8 +47,12 @@ INSERT INTO `journal-entries` (`id`, `date`, `account`, `type`, `amount`) VALUES
 (9, '06/24/2016', 'Accounts Payable', 'debit', '25000'),
 (10, '06/24/2016', 'equipment', 'credit', '5000'),
 (14, '06/24/2016', 'cash', 'debit', '1200'),
-(15, '06/24/2016', 'cash', 'debit', '500'),
-(16, '06/24/2016', 'electricity', 'credit', '300');
+(56, '06/24/2016', 'cash', 'debit', '500'),
+(57, '06/24/2016', 'equipment', 'debit', '500'),
+(58, '06/24/2016', 'equipment', 'debit', '100'),
+(59, '06/24/2016', 'equipment', 'debit', '10'),
+(64, '06/24/2016', 'equipment', 'debit', '10'),
+(65, '06/24/2016', 'equipment', 'debit', '20');
 
 -- --------------------------------------------------------
 
@@ -61,17 +65,7 @@ CREATE TABLE IF NOT EXISTS `journal-transactions` (
   `date` varchar(10) NOT NULL,
   `name` varchar(500) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
-
---
--- Dumping data for table `journal-transactions`
---
-
-INSERT INTO `journal-transactions` (`id`, `date`, `name`) VALUES
-(4, 'asfefef', 'wefewfwe argnar gajehrgk rgajkrhg akjgh argkjahr g'),
-(10, 'efw4g', 'g5t4h6'),
-(11, '23f5g5', '23ffrg'),
-(12, 'eeqf', 'afaef');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
